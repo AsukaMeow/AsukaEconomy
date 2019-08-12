@@ -3,48 +3,45 @@ package at.meowww.AsukaEconomy.currency;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CurrencyChain {
 
+    private LinkedList<Currency> chain = new LinkedList<>();
     private ArrayList<Currency> currencies = new ArrayList<>();
     private Map<Long, Currency> amountMap = new LinkedHashMap<>();
 
-    public CurrencyChain (ArrayList<Currency> list) {
-        this.currencies = list;
-        for (Currency c : currencies) {
-            amountMap.put(getBaseValue(c.getThisItemStack()), c);
+    public CurrencyChain () {}
+
+    public void addCurrency (Currency before, Currency next) {
+        if (before == null) {
+            this.chain.add(next);
+        } else {
+            ListIterator<Currency> iterator = this.chain.listIterator();
+            Currency c;
+            while (iterator.hasNext()) {
+                c = iterator.next();
+                if (c.equals(before)) {
+                    iterator.add(next);
+                }
+            }
         }
+        this.currencies.add(next);
     }
 
-    public long getBaseValue (ItemStack is) {
-        int count = is.getAmount() == 0 ? 1 : is.getAmount();
+    public long getValue (ItemStack is) {
         for (Currency c : currencies) {
-            if (c.getThisItemStack().getItemMeta().getDisplayName().equals(is.getItemMeta().getDisplayName())) {
-                if (c.isBase()) {
+            if (c.equals(is)) {
+                int count = is.getAmount();
+                int index = chain.indexOf(c);
+                if (index == 0) {
                     return count;
                 } else {
-                    return count * c.getMaxAmount() * getBaseValue(c.getPrevItemStack());
+                    return count * c.getMaxAmount() * getValue(chain.get(index + 1).getItemStack());
                 }
             }
         }
         return 0L;
-    }
-
-    public Map<Long, Currency> getMap () {
-        return this.amountMap;
-    }
-
-    public Currency getCurrencyByItemStack (ItemStack is) {
-        for (Currency c : currencies) {
-            if (c.getName().equals(is.getItemMeta().getDisplayName())) {
-                return c;
-            }
-        }
-        return null;
     }
 
     public List<ItemStack> getEqualCurrency (long amount) {
@@ -54,7 +51,7 @@ public class CurrencyChain {
         for (int i = reverse.size() - 1; i >= 0; i--) {
             long mapAmount = reverse.get(i);
             if (mapAmount <= amount) {
-                ItemStack is = amountMap.get(reverse.get(i)).getThisItemStack().clone();
+                ItemStack is = amountMap.get(reverse.get(i)).getItemStack().clone();
                 is.setAmount((int) (amount / mapAmount));
                 amount %= mapAmount;
                 list.add(is);
@@ -71,27 +68,7 @@ public class CurrencyChain {
         if (is == null)
             return false;
         for (Currency c : currencies) {
-            if (c.getThisItemStack().getItemMeta().getDisplayName().equals(is.getItemMeta().getDisplayName())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean containCurrency (String checkC) {
-        for (Currency c : currencies) {
-            if (c.getName().equals(checkC)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean containCurrency (Currency checkC) {
-        if (checkC == null)
-            return false;
-        for (Currency c : currencies) {
-            if (c == checkC) {
+            if (c.getItemStack().getItemMeta().getDisplayName().equals(is.getItemMeta().getDisplayName())) {
                 return true;
             }
         }

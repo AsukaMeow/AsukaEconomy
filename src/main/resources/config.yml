@@ -1,0 +1,35 @@
+Currency:
+  Enable: true
+  Debug: false
+  # Automatically convert the currencies to next one, when match MaxAmount
+  AutoConvert: true
+  # Prevent any interact action of currencies.
+  PreventInteract: true
+  CurrencyChain:
+    - ItemKey: COPPER_GRAIN
+      Material: SEEDS
+      DisplayName: Copper Grain
+      Lore:
+        - This is a copper grain
+      MaxAmount: 10
+      NextCurrency: COPPER_INGOT
+    - ItemKey: COPPER_INGOT
+      Material: BRICK
+      DisplayName: Copper Ingot
+      Lore:
+        - This is a copper ingot
+      MaxAmount: 10
+      NextCurrency: SILVER_INGOT
+    - ItemKey: IRON_INGOT
+      Material: IRON_INGOT
+      DisplayName: Silver Ingot
+      Lore:
+        - This is a silver ingot
+      MaxAmount: 10
+      NextCurrency: GOLD_INGOT
+    - ItemKey: GOLD_INGOT
+      Material: GOLD_INGOT
+      DisplayName: Gold Ingot
+      Lore:
+        - This is a gold ingot
+      MaxAmount: 10

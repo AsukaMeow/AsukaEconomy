@@ -9,7 +9,7 @@ public class ConfigManager {
     private AsukaEconomy plugin;
     private FileConfiguration config;
 
-    public MemorySection ecoConfig;
+    // public MemorySection ecoConfig;
     public MemorySection currencyConfig;
     public boolean debug = false;
 
@@ -21,7 +21,7 @@ public class ConfigManager {
         this.config = this.plugin.getConfig();
         this.config.options().copyDefaults(true);
         this.plugin.saveConfig();
-        this.ecoConfig = (MemorySection) this.config.get("Economy");
+        // this.ecoConfig = (MemorySection) this.config.get("Economy");
         this.currencyConfig = (MemorySection) this.config.get("Currency");
     }
 
@@ -31,8 +31,9 @@ public class ConfigManager {
     }
 
     public void saveConfig () {
-        this.config.set("Economy", this.ecoConfig);
-        this.config.set("Currenct", this.currencyConfig);
+        // this.config.set("Economy", this.ecoConfig);
+        // Temporary remove currency saving, becuz it overrides default copy.
+        //this.config.set("Currency", this.currencyConfig);
         this.plugin.saveConfig();
     }
 

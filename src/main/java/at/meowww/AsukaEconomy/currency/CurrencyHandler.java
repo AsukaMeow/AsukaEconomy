@@ -15,7 +15,7 @@ public class CurrencyHandler extends Handler {
 
     protected CurrencyListener listener;
 
-    public CurrencyChain chain;
+    public CurrencyChain chain = new CurrencyChain();
     public Map<String, Currency> currencies = new HashMap<>();
 
     public boolean debug;
@@ -25,7 +25,6 @@ public class CurrencyHandler extends Handler {
     public CurrencyHandler () {
         this.listener = new CurrencyListener(this);
     }
-
 
     public void invokePlayerBalance (Player player) {
         long amount = calculateInventoryCurrency(player.getInventory());
@@ -56,13 +55,6 @@ public class CurrencyHandler extends Handler {
         }
     }
 
-    public void removePlayerSurplusCurrency(Player player, long amount) {
-        for (ItemStack is : filterInventory(player.getInventory())) {
-            player.getInventory().remove(is);
-        }
-        this.givePlayerMissedCurrency(player, amount);
-    }
-
     public void convertCurrencies (Player player) {
         long amount = calculateInventoryCurrency(player.getInventory());
         for (ItemStack is : filterInventory(player.getInventory())) {
@@ -77,44 +69,28 @@ public class CurrencyHandler extends Handler {
         long amount = 0;
         for (ItemStack is : inv.getContents()) {
             if (is != null && currencies.containsKey(is.getItemMeta().getDisplayName())) {
-                // amount += getBaseValue(is);
-                amount += chain.getBaseValue(is);
+                amount += chain.getValue(is);
             }
         }
         return amount;
     }
 
-    private List<Currency> getTopStack(ItemStack is, ArrayList<Currency> concat) {
-        Currency c = this.currencies.get(is.getItemMeta().getDisplayName());
-        concat.add(c);
-        return c.isTop() ? concat : getTopStack(c.getNextItemStack(), concat);
-    }
-
-    private boolean currenciesLoad(MemorySection config) {
-        if (config.get("Kyc") == null) {
-            AsukaEconomy.logger.warning("Can not find Kyc setting in Currency config.");
-            return false;
-        }
-        List list = config.getList("Kyc");
+    private boolean currenciesLoad (MemorySection config) {
+        List list = config.getList("CurrencyChain");
         for (int i = 0; i < list.size(); ++i) {
-            Currency c = new Currency((Map) list.get(i));
-            currencies.put(c.getName(), c);
+            Map map = (Map) list.get(i);
+            Currency c = new Currency(map);
+            currencies.put(c.getItemKey(), c);
         }
         return true;
     }
 
-    private boolean chainLoad () {
+    private void chainLoad () {
         for (Iterator it = this.currencies.keySet().iterator(); it.hasNext();) {
             Currency c = this.currencies.get(it.next());
-            if (c.isBase()) {
-                ArrayList<Currency> chainList = new ArrayList<>();
-                getTopStack(c.getThisItemStack(), chainList);
-                // this.chains.add(new CurrencyChain(chainList));
-                chain = new CurrencyChain(chainList);
-                return true;
-            }
+            Currency n = this.currencies.get(c.getNextItemKey());
+            this.chain.addCurrency(c, n);
         }
-        return false;
     }
 
     @Override
@@ -124,6 +100,12 @@ public class CurrencyHandler extends Handler {
         this.debug = config.getBoolean("Debug", false);
         this.autoConvert = config.getBoolean("AutoConvert", false);
 
+        if (!this.enable) {
+            AsukaEconomy.logger.info("Currency enable is off, currency init will not function.");
+        } else {
+            this.currenciesLoad(this.config);
+            this.chainLoad();
+        }
     }
 
     @Override

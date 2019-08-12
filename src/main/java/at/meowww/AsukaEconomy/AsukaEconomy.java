@@ -25,6 +25,8 @@ public class AsukaEconomy extends JavaPlugin {
         vaultInvoke.invoke();
 
         configManager =  new ConfigManager(this);
+        currencyHandler = new CurrencyHandler();
+
         configManager.loadConfig();
         currencyHandler.load(configManager.currencyConfig);
     }
