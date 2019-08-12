@@ -1,0 +1,9 @@
+name: {NAME}
+version: {VERSION}
+author: {AUTHOR}
+main: {MAIN}
+commands:
+  asuka:
+    description: Asuka meow meow meow~
+    usage: |
+      /asuka eco ...
