@@ -2,7 +2,6 @@ package at.meowww.AsukaEconomy;
 
 import at.meowww.AsukaEconomy.currency.CurrencyHandler;
 import at.meowww.AsukaEconomy.invoke.VaultInvoke;
-import at.meowww.AsukaEconomy.utils.ConfigManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Logger;

@@ -23,6 +23,12 @@
             <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- AsukaMeow -->
+        <dependency>
+            <groupId>com.github.AsukaMeow</groupId>
+            <artifactId>AsukaMeow</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <!-- Valut API -->
         <dependency>
             <groupId>com.github.MilkBowl</groupId>

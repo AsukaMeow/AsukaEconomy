@@ -1,26 +1,19 @@
-package at.meowww.AsukaEconomy.utils;
+package at.meowww.AsukaEconomy;
 
-import at.meowww.AsukaEconomy.AsukaEconomy;
 import org.bukkit.configuration.MemorySection;
-import org.bukkit.configuration.file.FileConfiguration;
 
-public class ConfigManager {
-
-    private AsukaEconomy plugin;
-    private FileConfiguration config;
+public class ConfigManager extends at.meowww.AsukaMeow.util.ConfigManager {
 
     // public MemorySection ecoConfig;
     public MemorySection currencyConfig;
     public boolean debug = false;
 
     public ConfigManager (AsukaEconomy plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     public void loadConfig () {
-        this.config = this.plugin.getConfig();
-        this.config.options().copyDefaults(true);
-        this.plugin.saveConfig();
+        super.loadConfig();
         // this.ecoConfig = (MemorySection) this.config.get("Economy");
         this.currencyConfig = (MemorySection) this.config.get("Currency");
     }
@@ -34,7 +27,7 @@ public class ConfigManager {
         // this.config.set("Economy", this.ecoConfig);
         // Temporary remove currency saving, becuz it overrides default copy.
         //this.config.set("Currency", this.currencyConfig);
-        this.plugin.saveConfig();
+        super.saveConfig();
     }
 
 }

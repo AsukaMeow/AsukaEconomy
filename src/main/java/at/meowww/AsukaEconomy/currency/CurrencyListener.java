@@ -1,7 +1,7 @@
 package at.meowww.AsukaEconomy.currency;
 
 import at.meowww.AsukaEconomy.AsukaEconomy;
-import at.meowww.AsukaEconomy.utils.Listener;
+import at.meowww.AsukaMeow.util.Listener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -15,11 +15,11 @@ import static org.bukkit.Bukkit.getServer;
 
 public class CurrencyListener extends Listener {
     
-    private CurrencyHandler currencyHandler = null;
+    private CurrencyHandler currencyHandler;
 
     public CurrencyListener (CurrencyHandler handler) {
+        super(handler);
         this.currencyHandler = handler;
-        getServer().getPluginManager().registerEvents(this, AsukaEconomy.INSTANCE);
     }
 
     @EventHandler

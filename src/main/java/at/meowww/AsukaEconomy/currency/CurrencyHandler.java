@@ -1,7 +1,7 @@
 package at.meowww.AsukaEconomy.currency;
 
 import at.meowww.AsukaEconomy.AsukaEconomy;
-import at.meowww.AsukaEconomy.utils.Handler;
+import at.meowww.AsukaMeow.util.Handler;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.entity.Player;
@@ -105,6 +105,7 @@ public class CurrencyHandler extends Handler {
         } else {
             this.currenciesLoad(this.config);
             this.chainLoad();
+            this.listener.register(AsukaEconomy.INSTANCE);
         }
     }
 
